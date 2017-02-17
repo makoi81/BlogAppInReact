@@ -1,0 +1,8 @@
+
+rm -rf .git  => remove the .git folder.
+
+
+install query with npm i query
+import query  
+
+// or npm i -S fetch
