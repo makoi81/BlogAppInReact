@@ -1,8 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link, browserHistory, hashHistory } from 'react-router';
-import {Provider} from 'react-redux'
+import {Provider} from 'react-redux';
 import { createStore } from 'redux';
+import Edit from './Edit.jsx';
+import DeletePost from './DeletePost.jsx';
+
 require('./css/style.css')
 
 
@@ -21,8 +24,12 @@ const store = createStore(reducer,
 const Home =(props)=> <div>
 							<h1>Welcome to my BlogApp</h1>
 							<Link to="/" >blogApp</Link><br/>
+
+							
 							
 							{/*
+								<Link to="/edit" >edit</Link><br/>
+								
 								<h1>HOME</h1>
 							<Link to="/" >Home?</Link><br/>
 							<Link to="/blogApp" >blogApp</Link><br/>		
@@ -39,8 +46,17 @@ render(
 	<Provider store={store}>
 		<Router history={browserHistory}>
 			
+			<Route path="/edit/:id" component={Edit} />
+			<Route path="/deletePost" component={DeletePost} />
 			<Route path="/" component={BlogApp} >
+			
+			
+			
+
 			{/*
+				
+
+				//<Route path="edit/:id" component={Edit}/>
 				<Route path="/" component={Home} >
 				<Route path="/BlogApp" component={BlogApp} />
 				<Route path="/screen1" component={Screen1} />	

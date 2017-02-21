@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import TinyMCE from 'react-tinymce';
+import {Link} from 'react-router';
+import Edit from './Edit.jsx';
+//import DeletePost from './DeletePost.jsx';
 //const $ = require('jquery');
 
 class BlogApp extends Component {
@@ -11,15 +15,16 @@ class BlogApp extends Component {
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onContentChange = this.onContentChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+
 	}
 
-	componentDidMount() {
+	componentDidMount(){
 		$.get("/posts", (postsFromServer) => {
 			this.setState({ posts: postsFromServer });
 		})
 	}
 
-	onTitleChange(event) {
+	onTitleChange(event){
 		//console.log(event.target);
 		const titleBox = event.target;
 		this.title = titleBox.value;
@@ -51,9 +56,14 @@ class BlogApp extends Component {
 			});
 		});	
 	}
-		
-	render() {
 
+
+	
+		
+	render(){
+
+		function createMarkup() { return {__html: 'First &middot; Second'}; };
+		
 		return (
 			<div className="BlogApp">
 				<form id="blogForm" className="TextBox" onSubmit={this.handleSubmit}>
@@ -74,13 +84,21 @@ class BlogApp extends Component {
 					{ this.state.posts.map( (post, i)=> (
 						<li key={i}>
 							{post.title},<br/>
-							{post.content}
+							<div dangerouslySetInnerHTML={{__html:post.content}} />
+							<div><Link to={"/edit/" + post.id} >edit</Link></div>	
+							{/*<DeletePost /> */}
+							{/*{this.props.children} */}
 						</li>
+
 						)
 					)}
-				</ul>				
+				</ul>
+						
 			</div>
 		);
 	}
 }
 export default BlogApp;
+
+
+

@@ -1,83 +1,90 @@
 import React, { Component } from 'react';
-const $ = require('jquery');
+import TinyMCE from 'react-tinymce';
+//const $ = require('jquery');
 
-
-class BlogPost extends Component {
+class BlogApp extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
-			StatusUpdate: []
+			posts: []
     	};
 		
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onContentChange = this.onContentChange.bind(this);
-		this.onSubmit = this.onSubmit.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+
+	}
+
+	componentDidMount() {
+		$.get("/posts", (postsFromServer) => {
+			this.setState({ posts: postsFromServer });
+		})
 	}
 
 	onTitleChange(event) {
-		console.log(event.target);
+		//console.log(event.target);
+		const titleBox = event.target;
+		this.title = titleBox.value;
 	}
 
 	onContentChange(event) {
-		console.log(event.target);
+		//console.log(event.target);
+		const contentBox = event.target;
+		this.content = contentBox.value;
 	}
 		
-	onSubmit(event) {
+	handleSubmit(event) {
 		event.preventDefault();
 
-		let status = {
-			title: event.target.title.value,
-			content: event.target.content.value
+		const form = event.target;
 
+		const newPost = {
+			title: form.title.value, //this.title
+			content: form.content.value //this.content
 		}
-		
-		
-		console.log(status);
 
-		$.ajax("/server", { BlogPost: status}, function() {
+		console.log(newPost);
+
+		$.post("/posts", newPost, (data) => {
+			console.log(data);
+
 			this.setState({
-				StatusUpdate: [this.state.StatusUpdate, ...status]
+				posts: [...this.state.posts, newPost]
 			});
-		});
-	
+		});	
 	}
 		
 	render() {
+
+		function createMarkup() { return {__html: 'First &middot; Second'}; };
 		
-
-
-		return(
+		return (
 			<div className="BlogApp">
-				<form id="blogForm" className="TextBox" onSubmit={this.onSubmit}>
-					<input type="text" name="title" onChange={this.onTitleChange} />
-					
-					<label>
-		         	 	Name:
-		          		<textarea name="content"  onChange={this.onContentChange} />
-		        	</label>
-					<input type="submit" value ="Post" />		
-					<div>
-						
-					
+				<form id="blogForm" className="TextBox" onSubmit={this.handleSubmit}>
+					<label for="title">Title:</label>	
+					<div className="form-group col-lg-*">
+						<input type="text" name="title"  className="form-control " id='title'  placeholder='title'    onChange={this.onTitleChange} />
 					</div>
-
+					<label for="content">Content:</label>
+				    <div className="form-group">
+		          		<textarea  name="content" className="form-control" id="content" placeholder='Type your comment here...'  onChange={this.onContentChange} />
+		        	</div>
+		        	<div>
+					<input type="submit" value ="Post" />
+					</div>			
 				</form>
-			   {/*
+			   
 				<ul>
-					{ this.state.StatusUpdate.map( (text, i)=> (
+					{ this.state.posts.map( (post, i)=> (
 						<li key={i}>
-							{text.title},<br/>
-							{text.content}
+							{post.title},<br/>
+							<div dangerouslySetInnerHTML={{__html:post.content}} />
 						</li>
 						)
 					)}
-
-				</ul>
-				*/}
-				
+				</ul>				
 			</div>
 		);
 	}
 }
-
-export default BlogPost;
+export default BlogApp;
