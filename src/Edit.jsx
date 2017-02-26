@@ -65,14 +65,16 @@ class Edit extends Component {
     let {title, content,} = this.state;
     console.log(this.props.params.id);
     return (
+    	
 		<form id="blogFormUpdate" className="UpdatePost" onSubmit={this.handleSubmit} >
-			<label for="title">Title:</label>
+			<label htmlFor="title">Title:</label>
 			<div className="form-group col-lg-*">
 				<input type="text" name="title"  value={title} className="form-control " id="title"  placeholder="title"    onChange={this._changeTitle} />
 			</div> 
-			<label for="content">Content:</label>
+			<label htmlFor="content">Content:</label>
 			<div className="form-group">
-				<textarea type="text" name="content" value={content}  className="form-control" id="content" placeholder="Type your comment here..."  onChange={this._changeContent} /> 
+				<textarea type="text" name="content" value={content}  className="form-control" id="content" placeholder="Type your comment here..."  onChange={this._changeContent}  />
+				 
 			</div> 
 			<div>
 				<input type="submit" value ="Update" />

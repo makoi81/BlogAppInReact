@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TinyMCE from 'react-tinymce';
 import {Link} from 'react-router';
 import Edit from './Edit.jsx';
-//import DeletePost from './DeletePost.jsx';
+import DeletePost from './DeletePost.jsx';
 //const $ = require('jquery');
 
 class BlogApp extends Component {
@@ -15,9 +15,11 @@ class BlogApp extends Component {
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onContentChange = this.onContentChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.onDelete = this.onDelete.bind(this);
 
 	}
 
+	// load the data from the server
 	componentDidMount(){
 		$.get("/posts", (postsFromServer) => {
 			this.setState({ posts: postsFromServer });
@@ -30,13 +32,13 @@ class BlogApp extends Component {
 		this.title = titleBox.value;
 	}
 
-	onContentChange(event) {
+	onContentChange(event){
 		//console.log(event.target);
 		const contentBox = event.target;
 		this.content = contentBox.value;
 	}
 		
-	handleSubmit(event) {
+	handleSubmit(event){
 		event.preventDefault();
 
 		const form = event.target;
@@ -57,9 +59,17 @@ class BlogApp extends Component {
 		});	
 	}
 
-
 	
-		
+	onDelete(index){
+		console.log("HEREEEEE <<<<<<<<<<")
+	 	let postsCopy = [...this.state.posts];
+	 	console.log(index)
+	 	postsCopy.splice( index, 1);
+	  	this.setState({ 
+	    	posts: postsCopy
+		});
+	}
+
 	render(){
 
 		function createMarkup() { return {__html: 'First &middot; Second'}; };
@@ -87,6 +97,7 @@ class BlogApp extends Component {
 							<div dangerouslySetInnerHTML={{__html:post.content}} />
 							<div><Link to={"/edit/" + post.id} >edit</Link></div>	
 							{/*<DeletePost /> */}
+							<DeletePost callback={this.onDelete} index={i}/>
 							{/*{this.props.children} */}
 						</li>
 
@@ -98,6 +109,10 @@ class BlogApp extends Component {
 		);
 	}
 }
+BlogApp.propTypes = {
+	title: React.PropTypes.string,
+	content: React.PropTypes.string
+};
 export default BlogApp;
 
 

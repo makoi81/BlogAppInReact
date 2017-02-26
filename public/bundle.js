@@ -113,7 +113,7 @@
 			_reactRouter.Router,
 			{ history: _reactRouter.browserHistory },
 			_react2.default.createElement(_reactRouter.Route, { path: '/edit/:id', component: _Edit2.default }),
-			_react2.default.createElement(_reactRouter.Route, { path: '/deletePost', component: _DeletePost2.default }),
+			_react2.default.createElement(_reactRouter.Route, { path: '/delete/:id', component: _DeletePost2.default }),
 			_react2.default.createElement(_reactRouter.Route, { path: '/', component: _BlogApp2.default })
 		)
 	), document.getElementById('app'));
@@ -28468,7 +28468,7 @@
 					{ id: 'blogFormUpdate', className: 'UpdatePost', onSubmit: this.handleSubmit },
 					_react2.default.createElement(
 						'label',
-						{ 'for': 'title' },
+						{ htmlFor: 'title' },
 						'Title:'
 					),
 					_react2.default.createElement(
@@ -28478,7 +28478,7 @@
 					),
 					_react2.default.createElement(
 						'label',
-						{ 'for': 'content' },
+						{ htmlFor: 'content' },
 						'Content:'
 					),
 					_react2.default.createElement(
@@ -30570,55 +30570,38 @@
 				content: ""
 			};
 	
-			_this.deletePosted = _this.deletePosted.bind(_this);
+			_this.handleClick = _this.handleClick.bind(_this);
 			return _this;
 		}
 	
 		_createClass(DeletePost, [{
-			key: "deletePosted",
-			value: function deletePosted(item) {
-				var newState = this.state;
-				if (newState.indexOf(item) > -1) {
-					newState.splice(newState.indexOf(item), 1);
-					this.setState({ newState: newState });
-				}
+			key: "handleClick",
+			value: function handleClick(event) {
+				this.props.callback(this.props.index);
 			}
 		}, {
 			key: "render",
 			value: function render() {
-				//const listItem = this.state.map((item)=>{
-				return _react2.default.createElement(
-					"div",
-					{ key: item.this.props.params.id },
-					"//",
-					_react2.default.createElement(
-						"span",
-						null,
-						item.name
-					),
-					" ",
-					_react2.default.createElement(
-						"button",
-						{ onClick: this.deletePosted.bind(this, item) },
-						"Delete"
-					),
-					_react2.default.createElement(
-						"span",
-						null,
-						item.name
-					),
-					" ",
-					_react2.default.createElement(
-						"button",
-						{ onClick: this.deletePosted.bind(this.item) },
-						"Delete"
-					)
-				);
-				//})
+				var _this2 = this;
+	
 				return _react2.default.createElement(
 					"div",
 					null,
-					listItem
+					_react2.default.createElement(
+						"span",
+						null,
+						this.state.title,
+						", ",
+						this.state.content
+					),
+					" ",
+					_react2.default.createElement(
+						"button",
+						{ onClick: function onClick(e) {
+								return _this2.handleClick();
+							} },
+						"Delete"
+					)
 				);
 			}
 		}]);
@@ -30712,6 +30695,10 @@
 	
 	var _Edit2 = _interopRequireDefault(_Edit);
 	
+	var _DeletePost = __webpack_require__(/*! ./DeletePost.jsx */ 303);
+	
+	var _DeletePost2 = _interopRequireDefault(_DeletePost);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -30722,7 +30709,6 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	//import DeletePost from './DeletePost.jsx';
 	//const $ = require('jquery');
 	
 	var BlogApp = function (_Component) {
@@ -30740,9 +30726,13 @@
 			_this.onTitleChange = _this.onTitleChange.bind(_this);
 			_this.onContentChange = _this.onContentChange.bind(_this);
 			_this.handleSubmit = _this.handleSubmit.bind(_this);
+			_this.onDelete = _this.onDelete.bind(_this);
 	
 			return _this;
 		}
+	
+		// load the data from the server
+	
 	
 		_createClass(BlogApp, [{
 			key: 'componentDidMount',
@@ -30792,8 +30782,20 @@
 				});
 			}
 		}, {
+			key: 'onDelete',
+			value: function onDelete(index) {
+				console.log("HEREEEEE <<<<<<<<<<");
+				var postsCopy = [].concat(_toConsumableArray(this.state.posts));
+				console.log(index);
+				postsCopy.splice(index, 1);
+				this.setState({
+					posts: postsCopy
+				});
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var _this4 = this;
 	
 				function createMarkup() {
 					return { __html: 'First &middot; Second' };
@@ -30850,7 +30852,8 @@
 										{ to: "/edit/" + post.id },
 										'edit'
 									)
-								)
+								),
+								_react2.default.createElement(_DeletePost2.default, { callback: _this4.onDelete, index: i })
 							);
 						})
 					)
@@ -30861,6 +30864,10 @@
 		return BlogApp;
 	}(_react.Component);
 	
+	BlogApp.propTypes = {
+		title: _react2.default.PropTypes.string,
+		content: _react2.default.PropTypes.string
+	};
 	exports.default = BlogApp;
 
 /***/ },

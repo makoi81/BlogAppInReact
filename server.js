@@ -29,17 +29,10 @@ app.use(express.static("public"));
 const Post = sequelize.define('Post', {
     //create title and content as strings,
     title: Sequelize.STRING,
-    content: Sequelize.TEXT
+    content: Sequelize.STRING
 });
   
-  // DataBase for PostUpdate
-
-const PostUpdate = sequelize.define('PostUpdate', {
-    //create title and content as strings,
-    title: Sequelize.STRING,
-    content: Sequelize.TEXT
-});
-
+  
 
 //use the public folder as the static directory. 
 app.use( express.static(path.join(__dirname, 'public')));
@@ -94,8 +87,8 @@ app.post('/posts', (req, res) => {
 
     });
 })
- //Delete a post info from the dataBase
 
+ //Delete a post info from the dataBase
 app.get('/delete/:id', function(req, res) {
 
     Post.destroy(
@@ -109,96 +102,6 @@ app.get('/delete/:id', function(req, res) {
         res.json(results);
     });
 });
-
-
-
-// ******************* for PostUpdate **************
-/*
-app.get("/postUpdate", (req, res) => {
-	Post.findAll().then(
-		(results) => res.json(results)
-
-	);
-});
-
-app.post('/postUpdate', (req, res) => {
-	
-	let newUpdate = {
-		title: req.body.title,
-		content:req.body.content
-	}
-
-	console.log(newUpdate);
-	console.log('Hi guys this my express app');
-	PostUpdate.create(newUpdate).then((rows) =>{
-		console.log(rows);
-		res.json( rows);
-
-	});
-	
- });
- */
-
-//**************************
-
-// route to get the edit.ejs
-/*
-app.get('/edit/:id', function(req, res){
-	console.log("hi this list rendering ");
-	Post.findById(req.params.id).then((rows)=>{
-			res.json(rows);
-	});
-});
-*/
-// update the student info in the dataBase
-
-/*
-app.post('/edit/:id', function(req, res){
-
-	let newEntre = {
-		title: req.body.title,
-		content:req.body.content
-	}
-
-
-    Post.update(
-    	newEntre,
-    	{
-      		where:{
-  				id:req.params.id
-  			}
-    	}
-    ).then(function(blogPost) {
-
-
-
-    	res.json(blogPost)
-
-    });
-
-});
-
-*/
-
-//Delete a student info from the dataBase
-/*
-app.get('/delete/:id', function(req, res) {
-
-    Student.destroy(
-    	{
-            where: {
-                id: req.params.id
-            }
-        }).then(function(results) {
-
-
-        res.json(results);
-    });
-});
-
-*/
-
-//*****************************
 
 
 //send any route to index.html where the react app is mounted

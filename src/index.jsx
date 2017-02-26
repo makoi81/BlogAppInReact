@@ -47,7 +47,7 @@ render(
 		<Router history={browserHistory}>
 			
 			<Route path="/edit/:id" component={Edit} />
-			<Route path="/deletePost" component={DeletePost} />
+			<Route path="/delete/:id" component={DeletePost} /> 
 			<Route path="/" component={BlogApp} >
 			
 			
@@ -56,7 +56,9 @@ render(
 			{/*
 				
 
-				//<Route path="edit/:id" component={Edit}/>
+				<Route path="edit/:id" component={Edit}/>
+				<Route path="/delete/:id" component={DeletePost} />
+
 				<Route path="/" component={Home} >
 				<Route path="/BlogApp" component={BlogApp} />
 				<Route path="/screen1" component={Screen1} />	

@@ -3,3 +3,9 @@
 1.// set a route  to edit a single post in the server.
 
 2.// send the state to the server.
+
+3.// moment library makes the datetime nice
+
+4.// npm i json server
+
+5.// https://travis-ci.org/ for testing.

@@ -8,29 +8,21 @@ class DeletePost extends Component{
 		    content: ""	 
 		}
 
-		this.deletePosted = this.deletePosted.bind(this);    
-	}
-	deletePosted(item){
-		    const newState = this.state;
-		    if (newState.indexOf(item) > -1) {
-		    	newState.splice(newState.indexOf(item), 1);
-	        	this.setState({ newState})
-	    }
+		this.handleClick = this.handleClick.bind(this);    
 	}
 
-	render(){
-	    //const listItem = this.state.map((item)=>{
-		return <div key={item.this.props.params.id}>
-		//<span>{item.name}</span> <button onClick={this.deletePosted.bind(this, item)}>Delete</button>
-		<span>{item.name}</span> <button onClick={this.deletePosted.bind(this.item)}>Delete</button>
-		</div>
-	    //})
-	    return <div>
-	        {listItem}
-	    </div>
+	handleClick(event){
+		this.props.callback(this.props.index)
 	}
+
+		render(){ 
+		    return(
+		    		<div>
+		        		<span>{this.state.title}, {this.state.content}</span> <button onClick={(e)=>this.handleClick()} >Delete</button>
+		    		</div>
+		    	) 			
+		}
 }
-
 export default DeletePost;
 
 
