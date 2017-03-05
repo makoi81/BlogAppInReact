@@ -18,7 +18,7 @@ class DeletePost extends Component{
 		render(){ 
 		    return(
 		    		<div>
-		        		<span>{this.state.title}, {this.state.content}</span> <button onClick={(e)=>this.handleClick()} >Delete</button>
+		        		<span>{this.state.title}{this.state.content}</span> <button onClick={(e)=>this.handleClick()} >Delete</button>
 		    		</div>
 		    	) 			
 		}

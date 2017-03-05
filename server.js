@@ -6,10 +6,15 @@
 
 //instatiate sequelize and sqlite
 const Sequelize = require('sequelize');
-const DatabaseURL = 'sqlite://db';
+//const DatabaseURL = 'sqlite://db';
+const DatabaseURL = process.env.DATABASE_URL || 'sqlite://db';
+console.log(DatabaseURL);
+
+const port = process.env.PORT || 3000;
+
+
 const sequelize = new Sequelize(DatabaseURL);
 	
-
 //instatiate path and express
 const express = require('express')
 //import path from 'path'
@@ -112,7 +117,7 @@ app.get('*', (req,res)=>{
 //app.listen(3000,()=>console.log('running on localhost:3000'))
 
 sequelize.sync().then(()=>{
-	app.listen(3000,()=>console.log('running on localhost:3000'))
+	app.listen(port,()=>console.log('running on localhost:'+port))
 
 });
 

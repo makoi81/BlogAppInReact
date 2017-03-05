@@ -3,7 +3,6 @@ import TinyMCE from 'react-tinymce';
 import {Link} from 'react-router';
 import Edit from './Edit.jsx';
 import DeletePost from './DeletePost.jsx';
-//const $ = require('jquery');
 
 class BlogApp extends Component {
 	constructor(props) {
@@ -11,14 +10,11 @@ class BlogApp extends Component {
 		this.state = { 
 			posts: []
     	};
-		
 		this.onTitleChange = this.onTitleChange.bind(this);
 		this.onContentChange = this.onContentChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.onDelete = this.onDelete.bind(this);
-
 	}
-
 	// load the data from the server
 	componentDidMount(){
 		$.get("/posts", (postsFromServer) => {
@@ -42,13 +38,24 @@ class BlogApp extends Component {
 		event.preventDefault();
 
 		const form = event.target;
-
 		const newPost = {
 			title: form.title.value, //this.title
 			content: form.content.value //this.content
 		}
-
 		console.log(newPost);
+
+		var regexp = /[A-Z]/gi;
+		if (!newPost.title[0].match(regexp)) {
+			this.setState({
+				errorMessage: "NOT GOOD"	
+			});
+
+			return; //do not submit
+		} else {
+			this.setState({
+				errorMessage: null
+			});			
+		}
 
 		$.post("/posts", newPost, (data) => {
 			console.log(data);
@@ -58,10 +65,8 @@ class BlogApp extends Component {
 			});
 		});	
 	}
-
 	
 	onDelete(index){
-		console.log("HEREEEEE <<<<<<<<<<")
 	 	let postsCopy = [...this.state.posts];
 	 	console.log(index)
 	 	postsCopy.splice( index, 1);
@@ -72,11 +77,11 @@ class BlogApp extends Component {
 
 	render(){
 
-		function createMarkup() { return {__html: 'First &middot; Second'}; };
-		
+		function createMarkup() { return {__html: 'First &middot; Second'}; };	
 		return (
 			<div className="BlogApp">
-				<form id="blogForm" className="TextBox" onSubmit={this.handleSubmit}>
+				<form  className="TextBox" onSubmit={this.handleSubmit}>
+					<div className="errorMessage">{this.state.errorMessage}</div>
 					<label for="title">Title:</label>	
 					<div className="form-group col-lg-*">
 						<input type="text" name="title"  className="form-control " id='title'  placeholder='title'    onChange={this.onTitleChange} />
@@ -90,21 +95,17 @@ class BlogApp extends Component {
 					</div>			
 				</form>
 			   
-				<ul>
-					{ this.state.posts.map( (post, i)=> (
+				<ol>
+					{ this.state.posts.map( (post, i)=>(
 						<li key={i}>
-							{post.title},<br/>
+							<div>{post.title}</div>
 							<div dangerouslySetInnerHTML={{__html:post.content}} />
 							<div><Link to={"/edit/" + post.id} >edit</Link></div>	
-							{/*<DeletePost /> */}
-							<DeletePost callback={this.onDelete} index={i}/>
-							{/*{this.props.children} */}
+							<DeletePost callback={this.onDelete} index={i}/>					
 						</li>
-
 						)
 					)}
-				</ul>
-						
+				</ol>					
 			</div>
 		);
 	}

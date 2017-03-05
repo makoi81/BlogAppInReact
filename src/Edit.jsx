@@ -84,4 +84,9 @@ class Edit extends Component {
     );
   }
 }
+
+Edit.propTypes = {
+	title: React.PropTypes.string,
+	content: React.PropTypes.string
+};
 export default Edit;

@@ -61,6 +61,10 @@
 	
 	var _redux = __webpack_require__(/*! redux */ 231);
 	
+	var _reducers = __webpack_require__(/*! ./reducers */ 304);
+	
+	var _reducers2 = _interopRequireDefault(_reducers);
+	
 	var _Edit = __webpack_require__(/*! ./Edit.jsx */ 258);
 	
 	var _Edit2 = _interopRequireDefault(_Edit);
@@ -69,10 +73,6 @@
 	
 	var _DeletePost2 = _interopRequireDefault(_DeletePost);
 	
-	var _reducers = __webpack_require__(/*! ./reducers */ 304);
-	
-	var _reducers2 = _interopRequireDefault(_reducers);
-	
 	var _BlogApp = __webpack_require__(/*! ./BlogApp.jsx */ 306);
 	
 	var _BlogApp2 = _interopRequireDefault(_BlogApp);
@@ -80,10 +80,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	__webpack_require__(/*! ./css/style.css */ 307);
-	
-	//import Screen1 from './Screen1.jsx'
-	//import Screen2 from './Screen2.jsx'
-	//import Screen3 from './Screen3.jsx'
 	
 	var store = (0, _redux.createStore)(_reducers2.default, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 	
@@ -105,7 +101,6 @@
 			props.children
 		);
 	};
-	
 	(0, _reactDom.render)(_react2.default.createElement(
 		_reactRedux.Provider,
 		{ store: store },
@@ -28498,6 +28493,10 @@
 		return Edit;
 	}(_react.Component);
 	
+	Edit.propTypes = {
+		title: _react2.default.PropTypes.string,
+		content: _react2.default.PropTypes.string
+	};
 	exports.default = Edit;
 
 /***/ },
@@ -30591,7 +30590,6 @@
 						"span",
 						null,
 						this.state.title,
-						", ",
 						this.state.content
 					),
 					" ",
@@ -30709,8 +30707,6 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	//const $ = require('jquery');
-	
 	var BlogApp = function (_Component) {
 		_inherits(BlogApp, _Component);
 	
@@ -30722,15 +30718,12 @@
 			_this.state = {
 				posts: []
 			};
-	
 			_this.onTitleChange = _this.onTitleChange.bind(_this);
 			_this.onContentChange = _this.onContentChange.bind(_this);
 			_this.handleSubmit = _this.handleSubmit.bind(_this);
 			_this.onDelete = _this.onDelete.bind(_this);
-	
 			return _this;
 		}
-	
 		// load the data from the server
 	
 	
@@ -30765,13 +30758,24 @@
 				event.preventDefault();
 	
 				var form = event.target;
-	
 				var newPost = {
 					title: form.title.value, //this.title
 					content: form.content.value //this.content
 				};
-	
 				console.log(newPost);
+	
+				var regexp = /[A-Z]/gi;
+				if (!newPost.title[0].match(regexp)) {
+					this.setState({
+						errorMessage: "NOT GOOD"
+					});
+	
+					return; //do not submit
+				} else {
+					this.setState({
+						errorMessage: null
+					});
+				}
 	
 				$.post("/posts", newPost, function (data) {
 					console.log(data);
@@ -30784,7 +30788,6 @@
 		}, {
 			key: 'onDelete',
 			value: function onDelete(index) {
-				console.log("HEREEEEE <<<<<<<<<<");
 				var postsCopy = [].concat(_toConsumableArray(this.state.posts));
 				console.log(index);
 				postsCopy.splice(index, 1);
@@ -30800,13 +30803,17 @@
 				function createMarkup() {
 					return { __html: 'First &middot; Second' };
 				};
-	
 				return _react2.default.createElement(
 					'div',
 					{ className: 'BlogApp' },
 					_react2.default.createElement(
 						'form',
-						{ id: 'blogForm', className: 'TextBox', onSubmit: this.handleSubmit },
+						{ className: 'TextBox', onSubmit: this.handleSubmit },
+						_react2.default.createElement(
+							'div',
+							{ className: 'errorMessage' },
+							this.state.errorMessage
+						),
 						_react2.default.createElement(
 							'label',
 							{ 'for': 'title' },
@@ -30834,15 +30841,17 @@
 						)
 					),
 					_react2.default.createElement(
-						'ul',
+						'ol',
 						null,
 						this.state.posts.map(function (post, i) {
 							return _react2.default.createElement(
 								'li',
 								{ key: i },
-								post.title,
-								',',
-								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'div',
+									null,
+									post.title
+								),
 								_react2.default.createElement('div', { dangerouslySetInnerHTML: { __html: post.content } }),
 								_react2.default.createElement(
 									'div',

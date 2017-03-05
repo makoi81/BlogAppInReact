@@ -1,14 +1,14 @@
 {
-  "name": "react-router-boilerplate",
+  "name": "blogApp",
   "version": "1.0.0",
-  "description": "Boilerplate for creating a sample react-router application",
+  "description": "making a Blog app in reactJS and express",
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack -p --colors",
     "dev": "concurrently --prefix \"[{name}]\" -k \"webpack -d --watch --colors\"  \"nodemon server.js\" -n \"WEBPACK,NODEMON\"",
     "start": "node server.js"
   },
-  "author": "Fizal Sarif",
+  "author": "Mahamadou KOITA",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.16.1",
@@ -19,6 +19,7 @@
     "jquery": "^3.1.1",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
+    "pg": "^6.1.2",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^5.0.2",
